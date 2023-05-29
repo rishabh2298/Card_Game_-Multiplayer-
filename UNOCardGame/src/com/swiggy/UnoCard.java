@@ -53,7 +53,7 @@ public class UnoCard {
 	@Override
 	public String toString() {
 
-		String[] cardLayout = {" ----- ", "|     |","|     |"," ----- "}; 
+		String[] cardLayout = {" ------- ", "|     |","|     |"," ------- "}; 
 		
 		StringBuilder result = new StringBuilder();
 		

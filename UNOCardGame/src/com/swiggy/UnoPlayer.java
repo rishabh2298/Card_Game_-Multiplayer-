@@ -53,6 +53,7 @@ public class UnoPlayer {
 	
 	
 	// To add current card to player if satisfies the condition
+	// Draw a card from the deck.
 	
 	public void pickCard(UnoCard card) {
 		playerCards.add(card);
@@ -60,9 +61,10 @@ public class UnoPlayer {
 	
 	
 	// This method is use to select and throw card from playerCards by player
+	// Play a card from their hand.
 	
-	public void throwCardOnPile(int index) {
-		playerCards.remove(index);
+	public UnoCard throwCardOnPile(int index) {
+		return playerCards.remove(index);
 	}
 	
 	
@@ -91,19 +93,34 @@ public class UnoPlayer {
 	 * This method is to make output more graphically attractive
 	 */
 	
-//	public void showCards() {
-//		
-//		String[] cardLayout = {" ----- ","|     |"," ----- ","|     |"};
-//		
-//		for(int i=0; i<cardLayout.length; i++) {
-//			
-//			StringBuilder card = new StringBuilder();
-//			
-//			for(int j=0; j<playerCards.size(); j++) {
-//				if(i==1)
-//			}
-//		}
-//		
-//	}
+	public void showCards() {
+		
+		String[] cardLayout = {" ------- ","|     |","|     |"," ------- "};
+		
+		for(int i=0; i<cardLayout.length; i++) {
+			
+			StringBuilder card = new StringBuilder();
+			
+			for(int j=0; j<playerCards.size(); j++) {
+				
+				if(i==1) {
+					card.append("| "+playerCards.get(j).getColor()+" |"+" ");
+				}
+				
+				if(i==2) {
+					if(playerCards.get(j).isSpecialCard()) {
+						card.append("| "+playerCards.get(j).getSpecialCardValue()+" |"+" ");
+					}
+					else{
+						card.append("| "+playerCards.get(j).getValue()+" |"+" ");
+					}
+				}
+				
+			}
+			
+			System.out.println(card.toString());
+		}
+		
+	}
 	
 }
