@@ -117,7 +117,7 @@ public class UnoPlayer {
 					}
 				}
 				else {
-					card.append(cardLayout[j]+" ");
+					card.append(cardLayout[i]+" ");
 				}
 				
 			}

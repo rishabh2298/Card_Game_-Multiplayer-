@@ -1,7 +1,7 @@
 package com.swiggy;
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.Collections;
 
 public class UnoDeck {
 	
@@ -70,19 +70,8 @@ public class UnoDeck {
 		 * and swapping value with current index value
 		 */
 		
-		Random random = new Random();
-		int N = this.deckOfCards.size();
+		Collections.shuffle(deckOfCards);
 		
-		for(int i=0; i<N; i++) {
-			int randomIndex = i + random.nextInt(N - i);
-			UnoCard randomCard = this.deckOfCards.get(randomIndex);
-			
-			this.deckOfCards.remove(randomIndex);
-			this.deckOfCards.add(randomIndex, this.deckOfCards.get(i));
-			
-			this.deckOfCards.remove(i);
-			this.deckOfCards.set(i, randomCard);
-		}
 	}
 	
 	

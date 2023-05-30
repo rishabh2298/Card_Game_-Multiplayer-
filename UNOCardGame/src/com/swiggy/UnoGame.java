@@ -21,11 +21,11 @@ public class UnoGame {
 	
 	public UnoGame() {
 
-		// select normal card to start with;
-		currentCard = getInitialCard();
-		
 		// create deck of cards (108) as constructor builts
 		deckOfCards = new UnoDeck();
+		
+		// select normal card to start with;
+		currentCard = getInitialCard();
 		
 		// shuffles the deck before distributing to each player;
 		deckOfCards.shuffle();
@@ -282,15 +282,16 @@ public class UnoGame {
 		// current player choose card from it's handCards
 		
 		System.out.println("Please choose card");
-		int index = scanner.nextInt() - 1;
+		int index = scanner.nextInt();
 		
-		while(!isValidCard(currentPlayer, index)) {
+		while(!isValidCard(currentPlayer, index-1)) {
 			
 			System.out.println("Invalid Pick, Please choose correct card");
-			index = scanner.nextInt() - 1;
+			index = scanner.nextInt();
 			
 		}
 		
+		index--;
 		
 		UnoCard playedCard = currentPlayer.throwCardOnPile(index);
 		
