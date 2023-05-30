@@ -106,14 +106,17 @@ public class UnoPlayer {
 			for(int j=0; j<playerCards.size(); j++) {
 				
 				if(i==1) {
-					card.append("| "+playerCards.get(j).getColor()+" |"+" ");
+					card.append("|  "+playerCards.get(j).getColor()+"  |"+" ");
 				}
 				else if(i==2) {
 					if(playerCards.get(j).isSpecialCard()) {
 						card.append("| "+playerCards.get(j).getSpecialCardValue()+" |"+" ");
 					}
+					else if(String.valueOf(playerCards.get(j).getValue()).equals("wild")) {
+						card.append("|   "+playerCards.get(j).getValue()+"   |"+" ");
+					}
 					else{
-						card.append("| "+playerCards.get(j).getValue()+" |"+" ");
+						card.append("|   "+playerCards.get(j).getValue()+"   |"+" ");
 					}
 				}
 				else {
@@ -133,19 +136,20 @@ public class UnoPlayer {
 	
 	public void hideCards() {
 		
-		String[] cardLayout = {" ------- ","|     |","|     |"," ------- "};
+		String[] cardLayout = {" ------- ","|       |","|       |"," ------- "};
 		
 		StringBuilder result = new StringBuilder();
 		
 		for(int i=0; i<cardLayout.length; i++) {
 			
 			for(int j=0; j<playerCards.size(); j++) {
-				result.append(cardLayout[i]+" ");
+				result.append(" "+cardLayout[i]+" ");
 			}
 			
-			System.out.println(result.toString());
+			result.append("\n");
 		}
 		
+		System.out.println(result.toString());
 	}
 	
 }

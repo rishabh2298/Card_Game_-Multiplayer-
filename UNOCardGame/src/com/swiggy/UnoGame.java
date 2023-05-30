@@ -56,16 +56,10 @@ public class UnoGame {
 		}
 		
 		
-		/* if true then play in reverse order
-		 * of play in forward direction
+		/* In starting of game it move in forward direction 
 		*/
-		
-		if(reversePlay) {
-			reversePlay = false;
-		}
-		else {
-			reversePlay = true;
-		}
+
+		reversePlay = false;
 		
 		
 		// distribute cards to player equally;
@@ -129,27 +123,27 @@ public class UnoGame {
 		// if previous player has used wild +4 card
 		
 		if(penalty == 4) {
-			System.out.println("Since you have penalty so your chance is skipped and you have to take 4 cards from deck");
 			
-			if(drawCards && penalty != 4) {
+			System.out.println("Since you have penalty so your chance is skipped and you have to take 4 cards from deck");
 
-				for(int i=0; i<penalty; i++) {
-					
-					UnoCard newCard = deckOfCards.getTopCard();
-					currentPlayer.pickCard(newCard);
-					System.out.println("You have picked : " + newCard);
-					
-					if(deckOfCards.isEmpty()) {
-						deckOfCards = new UnoDeck(cardPile);
-						cardPile.clear();
-					}
+			for(int i=0; i<penalty; i++) {
+				
+				UnoCard newCard = deckOfCards.getTopCard();
+				currentPlayer.pickCard(newCard);
+				System.out.println("You have picked : " + newCard);
+				
+				waitToConfirm();
+				
+				if(deckOfCards.isEmpty()) {
+					deckOfCards = new UnoDeck(cardPile);
+					cardPile.clear();
 				}
-				
-				drawCards = false;
-				penalty = 0;
-				
-				return;
 			}
+			
+			drawCards = false;
+			penalty = 0;
+			
+			return;
 			
 		}
 
@@ -163,7 +157,7 @@ public class UnoGame {
 			// card = Reverse || draw_two || Skip
 			if(!currentCard.getColor().equals("wild")) {
 				
-				if(currentCard.getSpecialCardValue().equals("Skip")) {
+				if(currentCard.getSpecialCardValue().equals(" Skip ")) {
 					
 					// you got skipped;
 
@@ -204,9 +198,7 @@ public class UnoGame {
 			}
 			
 		}
-		
-		
-		if(haveAnyCounterCard(currentPlayer)) {
+		else if(currentCard.isSpecialCard() && haveAnyCounterCard(currentPlayer)) {
 			/*
 			 * If current palyer also used wild + 4
 			 */
@@ -260,6 +252,8 @@ public class UnoGame {
 				currentPlayer.pickCard(newCard);
 				System.out.println("You took : " + newCard);
 				
+				waitToConfirm();
+				
 				if(deckOfCards.isEmpty()) {
 					deckOfCards = new UnoDeck(cardPile);
 					cardPile.clear(); 
@@ -284,11 +278,14 @@ public class UnoGame {
 		System.out.println("Please choose card");
 		int index = scanner.nextInt();
 		
+		waitToConfirm();
+		
 		while(!isValidCard(currentPlayer, index-1)) {
 			
 			System.out.println("Invalid Pick, Please choose correct card");
 			index = scanner.nextInt();
 			
+			waitToConfirm();
 		}
 		
 		index--;
@@ -299,7 +296,7 @@ public class UnoGame {
 		cardPile.add(playedCard);
 		
 		// top card on pile
-		// work as prev card for next player
+		// work as previous card for next player
 		
 		currentCard = playedCard;
 		
@@ -317,6 +314,22 @@ public class UnoGame {
 				}
 			}
 		}
+		
+
+		/*
+		 * this will help for current palyer to choose another card
+		 * if he/she has any wild-card (or) wild-draw_four card
+		 */
+		
+		if(currentCard.getColor().equals("wild")) {
+			if(reversePlay) {
+				turn++;
+			}
+			else {
+				turn--;
+			}
+		}
+		
 		
 		// making card pile to new deckOfCards
 		// replenishing		if deck isEmpty()
@@ -505,6 +518,12 @@ public class UnoGame {
 	
 	private void printBoundry() {
 		System.out.println("#############################################################################################################");
+	}
+	
+	
+	private void waitToConfirm() {
+		System.out.println("Press Enter(any char) to continue");
+		scanner.next();
 	}
 	
 }

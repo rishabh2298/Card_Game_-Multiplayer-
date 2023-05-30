@@ -61,24 +61,24 @@ public class UnoCard {
 	@Override
 	public String toString() {
 
-		String[] cardLayout = {" ------- ", "|     |","|     |"," ------- "}; 
+		String[] cardLayout = {"------- ", "|        |","|        |","------- "}; 
 		
 		StringBuilder result = new StringBuilder();
 		
 		for(int i=0; i<cardLayout.length; i++) {
 			if(i==1) {
-				result.append("| "+this.getColor()+" |"+" ");
+				result.append("|  "+this.getColor()+"  |"+" ");
 			}
 			else if(i==2) {
 				if(isSpecialCard) {
-					result.append("| "+this.getSpecialCardValue()+" |"+" ");
+					result.append("| "+this.getSpecialCardValue()+"  |"+" ");
 				}
 				else {
-					result.append("| "+this.getValue()+" |"+" ");
+					result.append("|   "+this.getValue()+"    |"+" ");
 				}
 			}
 			else {
-				result.append(cardLayout[i]+" ");
+				result.append(" "+cardLayout[i]+" ");
 			}
 			// for new line
 			result.append("\n");

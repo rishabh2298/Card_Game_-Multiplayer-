@@ -17,9 +17,9 @@ public class UnoDeck {
 		
 		int[] numbers = {0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9};
 		
-		String[] colors = {"Blue","Red","Green","Yellow"};
+		String[] colors = {"Blue","Red ","Gren","Ylow"};
 		
-		String[] specialCards = {"draw_two","Skip","Reverse"};
+		String[] specialCards = {"draw_two"," Skip ","Reverse"};
 		
 		
 		// (0(1) + 1-9(2)) * 4 = 76 normal cards
@@ -44,7 +44,7 @@ public class UnoDeck {
 		// 4*2 = 8 (wild Card + wild Card draw_four)
 		
 		for(int i=0; i<4; i++) {
-			deckOfCards.add(new UnoCard("wild", "wild"));
+			deckOfCards.add(new UnoCard("wild", "  wild  "));
 			deckOfCards.add(new UnoCard("wild", "draw_four"));
 		}
 		
