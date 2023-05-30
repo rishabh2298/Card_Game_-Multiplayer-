@@ -16,17 +16,23 @@ public class UnoDeck {
 		deckOfCards = new ArrayList<>();
 		
 		int[] numbers = {0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9};
+		
 		String[] colors = {"Blue","Red","Green","Yellow"};
+		
 		String[] specialCards = {"draw_two","Skip","Reverse"};
 		
+		
 		// (0(1) + 1-9(2)) * 4 = 76 normal cards
+		
 		for(String color : colors) {
 			for(Integer num : numbers) {
 				deckOfCards.add(new UnoCard(color, num));
 			}
 		}
 		
+		
 		// (3 * 2) * 4 = 24 Special Cards (2 of each color);
+		
 		for(String color : colors) {
 			for(String cardValue: specialCards) {
 				deckOfCards.add(new UnoCard(color, cardValue));
@@ -34,11 +40,14 @@ public class UnoDeck {
 			}
 		}
 		
+		
 		// 4*2 = 8 (wild Card + wild Card draw_four)
+		
 		for(int i=0; i<4; i++) {
-			deckOfCards.add(new UnoCard("wild", "card"));
+			deckOfCards.add(new UnoCard("wild", "wild"));
 			deckOfCards.add(new UnoCard("wild", "draw_four"));
 		}
+		
 		
 		// Total cards = 108	(76 normal + 24 special + 8 wild)
 		
@@ -81,6 +90,18 @@ public class UnoDeck {
 	
 	public UnoCard getTopCard() {
 		return this.deckOfCards.remove(this.deckOfCards.size() - 1);
+	}
+	
+	
+	// To check for wild card while taking starting card
+	
+	public UnoCard peek() {
+		return this.deckOfCards.get(deckOfCards.size()-1);
+	}
+	
+	
+	public boolean isEmpty() {
+		return deckOfCards.size() == 0;
 	}
 	
 	

@@ -11,7 +11,8 @@ public class UnoPlayer {
 
 	
 	public UnoPlayer(String playerName) {
-		this.playerId = generatePlayerId(6);		// give uniqe ID for player
+		// give uniqe ID to player
+		this.playerId = generatePlayerId(6);		
 		this.playerName = playerName;
 		playerCards = new ArrayList<>();
 	}
@@ -82,6 +83,7 @@ public class UnoPlayer {
 	
 	
 	// To check if player has won the game or not
+	// Declaring a winner
 	
 	public boolean hasWon() {
 		return playerCards.size() == 0;
@@ -89,7 +91,7 @@ public class UnoPlayer {
 	
 	
 	/*
-	 * To print all the player cards 
+	 * To print all cards of current - player 
 	 * This method is to make output more graphically attractive
 	 */
 	
@@ -106,8 +108,7 @@ public class UnoPlayer {
 				if(i==1) {
 					card.append("| "+playerCards.get(j).getColor()+" |"+" ");
 				}
-				
-				if(i==2) {
+				else if(i==2) {
 					if(playerCards.get(j).isSpecialCard()) {
 						card.append("| "+playerCards.get(j).getSpecialCardValue()+" |"+" ");
 					}
@@ -115,10 +116,34 @@ public class UnoPlayer {
 						card.append("| "+playerCards.get(j).getValue()+" |"+" ");
 					}
 				}
+				else {
+					card.append(cardLayout[j]+" ");
+				}
 				
 			}
 			
 			System.out.println(card.toString());
+		}
+		
+	}
+	
+	
+	// to hide cards of other player
+	// while current player chance
+	
+	public void hideCards() {
+		
+		String[] cardLayout = {" ------- ","|     |","|     |"," ------- "};
+		
+		StringBuilder result = new StringBuilder();
+		
+		for(int i=0; i<cardLayout.length; i++) {
+			
+			for(int j=0; j<playerCards.size(); j++) {
+				result.append(cardLayout[i]+" ");
+			}
+			
+			System.out.println(result.toString());
 		}
 		
 	}

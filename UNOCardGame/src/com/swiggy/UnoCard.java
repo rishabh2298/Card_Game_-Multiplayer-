@@ -11,20 +11,27 @@ public class UnoCard {
 	// constructor for normal cards
 	
 	public UnoCard(String color, int value) {
+		
 		this.color = color;
 		this.value = value;
 		isSpecialCard = false;
 		specialCardValue = null;
+	
 	}
+	
 	
 	
 	// constructor for special card +2(draw-two), +4(draw-four), reverse, skip, wild cards
 	
 	public UnoCard(String color, String specialCardValue) {
+	
 		this.color = color;
-		this.value = 0;
+		// So that if checking by value(in hasSameValue(), isValidCard()) it wont create any wrong 
+		// output because of value=0
+		this.value = -1;
 		this.isSpecialCard = true;
 		this.specialCardValue = specialCardValue;
+	
 	}
 
 
@@ -47,6 +54,7 @@ public class UnoCard {
 		return specialCardValue;
 	}
 
+	
 
 	// To print cards in shape
 	
