@@ -20,7 +20,7 @@ public class Game {
 	private PlayerService playerService;
 	private DeckService deckService;
 	private int penalty;
-	private int playerTurn;
+	private int turn;
 	private boolean reversePlay;
 	private Scanner scanner;
 	
@@ -83,11 +83,52 @@ public class Game {
 	
 	public void startGame() {
 		
-		playerTurn = totalPlayers.length;
+		// this will help to start with first player always
+		turn = totalPlayers.length;
 		
 		while(!gameOver(totalPlayers)) {
 			
+			int playerTurn = turn % totalPlayers.length;
+			playGame(totalPlayers[playerTurn]);
+			
+			if(reversePlay) {
+				turn--;
+			}
+			else {
+				turn++;
+			}
+			
+			// if turn(0)-- is in case of (reverse play);
+			if(turn == -1) {
+				turn = totalPlayers.length - 1;
+			}
+			
+			// if skip one player (ACE) when (turn=0) to turn=-2 from method call
+			else if(turn == -2) {
+				turn = totalPlayers.length - 2;
+			}
+			
+			/*
+			 *  if turn was skipped from turn=0 to turn=-2 (due to ACE)
+			 *  and at same time (reversePlay=true) then turn-- will make
+			 *  turn = -3;
+			 */
+			else if(turn == -3) {
+				if(totalPlayers.length == 2) {
+					turn = 0;	// for 1st player as (3 skipped - 2,1,2)
+				}
+				
+				// for greater than 2 player
+				else {	
+					turn = totalPlayers.length - 3;
+				}
+			}
 		}
+		
+	}
+	
+	
+	private void playGame(Player currentPlayer) {
 		
 	}
 	
