@@ -39,7 +39,7 @@ public class DeckOfCards {
 		// Total cards 52 (normal cards(40) + action cards(12))
 	}
 
-	
+
 	public Card[] getDeckOfCards() {
 		return deckOfCards;
 	}
