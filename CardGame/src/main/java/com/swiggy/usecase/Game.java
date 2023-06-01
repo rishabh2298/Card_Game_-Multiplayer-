@@ -2,6 +2,8 @@ package com.swiggy.usecase;
 
 import java.util.Scanner;
 
+import javax.print.DocFlavor.INPUT_STREAM;
+
 import com.swiggy.model.Card;
 import com.swiggy.model.Deck;
 import com.swiggy.model.Player;
@@ -91,12 +93,12 @@ public class Game {
 			int playerTurn = turn % totalPlayers.length;
 			playGame(totalPlayers[playerTurn]);
 			
-			if(reversePlay) {
-				turn--;
-			}
-			else {
-				turn++;
-			}
+//			if(reversePlay) {
+//				turn--;
+//			}
+//			else {
+//				turn++;
+//			}
 			
 			// if turn(0)-- is in case of (reverse play);
 			if(turn == -1) {
@@ -132,6 +134,28 @@ public class Game {
 	
 	private void playGame(Player currentPlayer) {
 		
+		// if deckOfCards are empty then game is draw
+		
+		if(deckService.isEmpty(deck.getDeckOfCards())){
+			printBoundry();
+			System.out.println("Match is Draw, As deckOfCards is finished.......");
+			printBoundry();
+			
+			System.out.println("Want to start new Game? (y/n)");
+			String choice = scanner.next();
+			
+			if(choice.equalsIgnoreCase("y")) {
+				deck = new Deck();
+				startGame();
+				return;
+			}
+			else {
+				System.out.println("Thankyou to play...........");
+				return;
+			}
+		}
+		
+		
 		// to design output much readable
 		printBoundry();
 		
@@ -144,8 +168,102 @@ public class Game {
 		printBoundry();
 		
 		
+		// if there is penalty then current player has to draw cards, and his chance got skipped
+		// In case of currentCard = Jack, Queen
 		
+		if(penalty != 0) {
+			System.out.println("Since current card is Action Card, So you have to draw="+penalty+" from deck of cards");
+
+			while(penalty-- >0) {
+				
+				Card newCard = deckService.getTopCard(deck.getDeckOfCards());
+				playerService.pickCard(currentPlayer, newCard);
+				
+				System.out.println("You have picked card :-"+ newCard);
+				confirmToContinue();
+				
+				// while taking cards from deckOFCards it get's empty, then
+				
+				if(deckService.isEmpty(deck.getDeckOfCards())){
+					printBoundry();
+					System.out.println("Match is Draw, As deckOfCards is finished.......");
+					printBoundry();
+					
+					System.out.println("Want to start new Game? (y/n)");
+					String choice = scanner.next();
+					
+					if(choice.equalsIgnoreCase("y")) {
+						deck = new Deck();
+						startGame();
+						return;
+					}
+					else {
+						System.out.println("Thankyou to play...........");
+						return;
+					}
+				}
+			}
+			
+			/*
+			 * Throwing valid card for next player as he/she can't throw same card/any action cards
+			 * So, Checking it has validCard to play then provide chance, otherwise
+			 * skipped his chance
+			 */
+
+			if(!checkForDifferentValidCard(currentPlayer)){
+				System.out.println("You don't have valid card to play, So your chance is skipped");
+			}
+			else {
+				System.out.println("Choose card to throw on Discard Pile");
+				int selectedCard = scanner.nextInt();
+				
+				while(isAnyActionCard(currentPlayer, selectedCard) || isDifferentSuitCard(currentPlayer, selectedCard)){
+					System.out.println("Choose valid card to throw on Discard Pile,\nCan't be action/different suit card");
+					selectedCard = scanner.nextInt();
+				}
+			}
+			
+			if(reversePlay) {
+				turn--;
+			}
+			else {
+				turn++;
+			}
+			
+			// need to stop, for providing next chance to next player
+			return;
+		}
 		
+
+		/*
+		 *  if current card is any Action Card () 
+		 */
+		
+	}
+	
+	
+	private boolean checkForDifferentValidCard(Player currentPlayer) {
+		
+		return false;
+	}
+	
+	
+	private boolean isDifferentSuitCard(Player currentPlayer, int selectedCard) {
+		
+		return false;
+	}
+	
+	
+	private boolean isAnyActionCard(Player currentPlayer, int selectedCard) {
+		
+		// return true, if any of the actions cards (Ace, Jack, Queen, King)
+		
+		if(currentPlayer.getCardsInHand()[selectedCard].isSpecialCard())
+			return true;
+		
+		// return false, if card=null or not an action card
+		
+		return false;
 	}
 	
 	
@@ -215,6 +333,12 @@ public class Game {
 			}
 		}
 		
+	}
+	
+	
+	private void confirmToContinue() {
+		System.out.println("Enter (any key) to continue");
+		scanner.next();
 	}
 	
 	
