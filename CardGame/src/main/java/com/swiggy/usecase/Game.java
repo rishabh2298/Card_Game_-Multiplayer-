@@ -359,6 +359,34 @@ public class Game {
 
 		if(!checkForDifferentNonActionCard(currentPlayer)){
 			System.out.println("You don't have valid card to play, So your chance is skipped");
+			System.out.println("You have to draw a new card");
+
+			Card newCard = deckService.getTopCard(deck.getDeckOfCards());
+			playerService.pickCard(currentPlayer, newCard);
+			
+			System.out.println("You have picked card :-"+ newCard);
+			confirmToContinue();
+			
+			// while taking cards from deckOFCards it get's empty, then
+			
+			if(deckService.isEmpty(deck.getDeckOfCards())){
+				printBoundry();
+				System.out.println("Match is Draw, As deckOfCards is finished.......");
+				printBoundry();
+				
+				System.out.println("Want to start new Game? (y/n)");
+				String choice = scanner.next();
+				
+				if(choice.equalsIgnoreCase("y")) {
+					deck = new Deck();
+					startGame();
+					return;
+				}
+				else {
+					System.out.println("Thankyou to play...........");
+					return;
+				}
+			}
 		}
 		else {
 			System.out.println("Choose card to throw on Discard Pile");
