@@ -20,7 +20,7 @@ public class Game {
 	private PlayerService playerService;
 	private DeckService deckService;
 	private int penalty;
-	private int turn;
+	private int playerTurn;
 	private boolean reversePlay;
 	private Scanner scanner;
 	
@@ -76,6 +76,40 @@ public class Game {
 		// Distributing 5-cards initially to each players
 		distributeCardsToPlayer();
 		
+	}
+	
+	
+	// starting of game (take care of current player both in normal/reverse case)
+	
+	public void startGame() {
+		
+		playerTurn = totalPlayers.length;
+		
+		while(!gameOver(totalPlayers)) {
+			
+		}
+		
+	}
+	
+	
+	private boolean gameOver(Player[] totalPlayers) {
+		
+		for(Player currentPlayer : totalPlayers) {
+			
+			if(playerService.hasWon(currentPlayer)) {
+
+				System.out.println("oooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+				System.out.println("Congratulations" +" "+ currentPlayer.getPlayerName());
+				System.out.println("You have won the GAME.......");
+				System.out.println("oooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+				
+				scanner.close();
+				
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	
