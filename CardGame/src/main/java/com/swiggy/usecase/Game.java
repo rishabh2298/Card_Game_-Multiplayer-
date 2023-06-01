@@ -38,6 +38,9 @@ public class Game {
 		// creating Card[] deckOfCards as constructor built
 		deck = new Deck();
 		
+		// shuffle to make card unpredictable
+		deckService.shuffle(deck.getDeckOfCards());
+		
 		// get starting card before first player chance.
 		currentCard = getInitialCard();
 		
@@ -91,13 +94,6 @@ public class Game {
 			
 			int playerTurn = turn % totalPlayers.length;
 			playGame(totalPlayers[playerTurn]);
-			
-//			if(reversePlay) {
-//				turn--;
-//			}
-//			else {
-//				turn++;
-//			}
 			
 			// if turn(0)-- is in case of (reverse play);
 			if(turn == -1) {
@@ -158,87 +154,13 @@ public class Game {
 		// to design output much readable
 		printBoundry();
 		
-		System.out.println(currentPlayer+"It's you turn, Current Card on Discard Pile is :-"+ currentCard);
+		System.out.println(currentPlayer.getPlayerName()+" It's you turn, Current Card on Discard Pile is :-\n"+ currentCard);
 		
 		printBoundry();
 		
 		showCardsToCurrentPlayer(currentPlayer);
 		
 		printBoundry();
-		
-		
-		// if there is penalty then current player has to draw cards, and his chance got skipped
-		// In case of currentCard = Jack, Queen
-		
-		if(penalty != 0) {
-//			System.out.println("Since current card is Action Card, So you have to draw="+penalty+" from deck of cards");
-//
-//			while(penalty-- >0) {
-//				
-//				Card newCard = deckService.getTopCard(deck.getDeckOfCards());
-//				playerService.pickCard(currentPlayer, newCard);
-//				
-//				System.out.println("You have picked card :-"+ newCard);
-//				confirmToContinue();
-//				
-//				// while taking cards from deckOFCards it get's empty, then
-//				
-//				if(deckService.isEmpty(deck.getDeckOfCards())){
-//					printBoundry();
-//					System.out.println("Match is Draw, As deckOfCards is finished.......");
-//					printBoundry();
-//					
-//					System.out.println("Want to start new Game? (y/n)");
-//					String choice = scanner.next();
-//					
-//					if(choice.equalsIgnoreCase("y")) {
-//						deck = new Deck();
-//						startGame();
-//						return;
-//					}
-//					else {
-//						System.out.println("Thankyou to play...........");
-//						return;
-//					}
-//				}
-//			}
-//			
-//			/*
-//			 * Throwing valid card for next player as he/she can't throw same card/any action cards
-//			 * So, Checking it has validCard to play then provide chance, otherwise
-//			 * skipped his chance
-//			 */
-////
-////			if(!checkForDifferentValidCard(currentPlayer)){
-////				System.out.println("You don't have valid card to play, So your chance is skipped");
-////			}
-////			else {
-////				System.out.println("Choose card to throw on Discard Pile");
-////				int selectedCard = scanner.nextInt();
-////				
-////				while(isAnyActionCard(currentPlayer, selectedCard) || !isDifferentSuitCard(currentPlayer, selectedCard)){
-////					System.out.println("Choose valid card to throw on Discard Pile,\nCan't be action/different suit card");
-////					selectedCard = scanner.nextInt();
-////				}
-////				
-////				// updating current card for next player
-////				
-////				currentCard = playerService.throwCardOnDiscardPile(currentPlayer, selectedCard);
-////				
-////				discardPile[indexOfDiscardPile++] = currentCard;
-////				
-////			}
-//			
-//			if(reversePlay) {
-//				turn--;
-//			}
-//			else {
-//				turn++;
-//			}
-//			
-//			// need to stop, for providing next chance to next player
-//			return;
-		}
 		
 
 		/*
@@ -276,17 +198,22 @@ public class Game {
 				
 				if(applyActionCard) {
 					applyActionCard = false;
-//					selectNextCard(currentPlayer);
+					selectAnyNextCard(currentPlayer);
+					
+					if(reversePlay) turn--;
+					else turn++;
+					
+					return;
 				}
 				
 				// reverse the flow of playerTurns
 				if(reversePlay) {
 					reversePlay = false;
-					turn++;
+					turn = turn + 2;
 				}
 				else {
 					reversePlay = true;
-					turn--;
+					turn = turn - 2;
 				}
 				
 				this.applyActionCard = true;
@@ -297,15 +224,75 @@ public class Game {
 			else if(currentCard.getFace().equals(" Queen  ")) {
 				
 				// draw 2 cards from deckOfCards (penalty = 2)
+				penalty = 2;
 				
+				/*
+				 * current player draw 2 cards and throw a valid(non-action) card if available
+				 * otherwise his chance get skipped as penalty got fined already;
+				 * 
+				 * same applies for next player until valid card found
+				 */
 				penaltyGotApplied(currentPlayer);
+				
+				return;
 			}
 			else if(currentCard.getFace().equals("  Jack  ")) {
 				
+				// draw 4 cards from deckOFCards (penalty = 4)
+				penalty = 4;
+				
+				penaltyGotApplied(currentPlayer);
+				
+				return;
 			}
 
 		}
 		
+		
+		// for Normal current card
+		selectAnyNextCard(currentPlayer);
+		
+		if(reversePlay) turn--;
+		else turn++;
+	}
+	
+	
+	private void selectAnyNextCard(Player currentPlayer){
+
+		System.out.println("Choose card to throw on Discard Pile");
+		int selectedCard = scanner.nextInt();
+		
+		while(!isValidCard(currentPlayer, selectedCard)){
+			System.out.println("Choose valid card to throw on Discard Pile,\nCan't be null/different suit card");
+			selectedCard = scanner.nextInt();
+		}
+		
+		// updating current card for next player
+		
+		currentCard = playerService.throwCardOnDiscardPile(currentPlayer, selectedCard);
+		
+		discardPile[indexOfDiscardPile++] = currentCard;
+	}
+	
+	
+	private boolean isValidCard(Player currentPlayer, int selectedCard) {
+	
+		Card choosenCard = currentPlayer.getCardsInHand()[selectedCard];
+		
+		if(choosenCard != null) {
+			
+			// if same suit then can be any card
+			if(choosenCard.getSuit().equals(currentCard.getSuit())) {
+				return true;
+			}
+			
+			// if different suit then value(rank) of both the cards should be same
+			else if(choosenCard.getFace().equals(currentCard.getFace())) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	
@@ -370,7 +357,7 @@ public class Game {
 	
 	private void nextCardIfCurrentCardIsActionCard(Player currentPlayer) {
 
-		if(!checkForDifferentValidCard(currentPlayer)){
+		if(!checkForDifferentNonActionCard(currentPlayer)){
 			System.out.println("You don't have valid card to play, So your chance is skipped");
 		}
 		else {
@@ -391,8 +378,8 @@ public class Game {
 		}
 	}
 	
-	
-	private boolean checkForDifferentValidCard(Player currentPlayer) {
+	// it will check for availability non-action card of same suit
+	private boolean checkForDifferentNonActionCard(Player currentPlayer) {
 
 		for(Card card : currentPlayer.getCardsInHand()) {
 			

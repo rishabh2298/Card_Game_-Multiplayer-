@@ -26,7 +26,7 @@ public class Deck {
 		for(int suit=0; suit<allSuits.length; suit++) {
 			for(int face=0; face<allFaces.length; face++) {
 				// In case of Number cards (Non-Action cards)
-				if(face!=0 || face<10) {
+				if(face!=0 && face<10) {
 					deckOfCards[index++] = new Card(allSuits[suit], allFaces[face]);
 				}
 				// In case of Special cards (Action cards)

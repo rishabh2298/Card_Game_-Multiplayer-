@@ -40,11 +40,11 @@ public class Card {
 	
 	public String toString() {
 		
-		String[] cardLayout = {"========== ","| |","| |","========== "};
+		String[] cardLayout = {" ======== ","| |","| |"," ======== "};
 		
 		StringBuilder cardBox = new StringBuilder();
 		
-		for(int index=1; index<cardLayout.length; index++) {
+		for(int index=0; index<cardLayout.length; index++) {
 			if(index==1) {
 				cardBox.append("|"+this.suit+"|");
 			}

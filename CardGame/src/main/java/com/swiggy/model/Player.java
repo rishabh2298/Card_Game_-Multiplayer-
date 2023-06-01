@@ -2,7 +2,7 @@ package com.swiggy.model;
 
 public class Player {
 	
-	private int playerId;
+	private String playerId;
 	private String playerName;
 	private Card[] cardsInHand;
 	private int indexOfNextNewCard;
@@ -24,7 +24,7 @@ public class Player {
 	
 	// This will generate unique Id for each players;
 	
-	private int generatePlayerId(int size) {
+	private String generatePlayerId(int size) {
 		
 		StringBuilder playerId = new StringBuilder();
 
@@ -34,11 +34,11 @@ public class Player {
 			playerId.append(numbers.length * Math.random());
 		}
 		
-		return Integer.parseInt(playerId.toString());
+		return playerId.toString();
 	}
 	
 
-	public int getPlayerId() {
+	public String getPlayerId() {
 		return playerId;
 	}
 
@@ -59,11 +59,6 @@ public class Player {
 	
 	public void setIndexOfNextNewCard(int indexOfNextNewCard) {
 		this.indexOfNextNewCard = indexOfNextNewCard;
-	}
-
-	
-	public String toString() {
-		return "Player Id = "+this.playerId+"\nPlayer Name = "+this.playerName+"\n";
 	}
 	
 }

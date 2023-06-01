@@ -71,7 +71,7 @@ public class PlayerServiceImplementation implements PlayerService {
 	
 	public void showCurrentPlayerCards(Player currentPlayer) {
 		
-		String[] cardLayout = {"========== ","| |","| |","========== "};
+		String[] cardLayout = {"======== ","| |","| |","======== "};
 
 		for(int layout=0; layout<cardLayout.length; layout++) {
 			
@@ -100,7 +100,7 @@ public class PlayerServiceImplementation implements PlayerService {
 
 	public void hideOtherPlayerCards(Player currentPlayer) {
 
-		String[] cardLayout = {"========== ","|        |","|         |","========== "};
+		String[] cardLayout = {" ======== ","|        |","|        |"," ======== "};
 		
 		StringBuilder result = new StringBuilder();
 		
