@@ -128,7 +128,40 @@ public class Game {
 	}
 	
 	
+	// this method contains main process of game
+	
 	private void playGame(Player currentPlayer) {
+		
+		// to design output much readable
+		printBoundry();
+		
+		System.out.println(currentPlayer+"It's you turn, Current Card on Discard Pile is :-"+ currentCard);
+		
+		printBoundry();
+		
+		showCardsToCurrentPlayer(currentPlayer);
+		
+		printBoundry();
+		
+		
+		
+		
+	}
+	
+	
+	// This will print only cards of current player
+	
+	private void showCardsToCurrentPlayer(Player currentPlayer) {
+		
+		for(Player player : totalPlayers) {
+			
+			if(player.getPlayerId() == currentPlayer.getPlayerId()) {
+				playerService.showCurrentPlayerCards(currentPlayer);
+			}
+			else {
+				playerService.hideOtherPlayerCards(player);
+			}
+		}
 		
 	}
 	
@@ -184,4 +217,9 @@ public class Game {
 		
 	}
 	
+	
+	private void printBoundry() {
+		System.out.println("#############################################################################################################");
+	}
+
 }

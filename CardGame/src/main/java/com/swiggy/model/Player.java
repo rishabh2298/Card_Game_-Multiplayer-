@@ -63,7 +63,7 @@ public class Player {
 
 	
 	public String toString() {
-		return "Player Id = "+this.playerId+"\nPlayer Name = "+this.playerName;
+		return "Player Id = "+this.playerId+"\nPlayer Name = "+this.playerName+"\n";
 	}
 	
 }
