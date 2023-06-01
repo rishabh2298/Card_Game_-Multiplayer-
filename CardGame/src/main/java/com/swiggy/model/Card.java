@@ -6,6 +6,10 @@ public class Card {
 	private String face;
 	private boolean isSpecialCard;
 	
+	public Card() {
+		// Zero argument constructor of deckOfCards 
+	}
+	
 	// Constructor for normal(number) cards
 	
 	public Card(String suit, String face) {
