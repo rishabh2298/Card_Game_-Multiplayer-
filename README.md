@@ -1,4 +1,4 @@
-# swiggy_assignment
+# Uno_Game
 Console Based UNO Card Game
 
 ## Some Snippets of Output
