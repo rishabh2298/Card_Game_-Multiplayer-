@@ -2,8 +2,6 @@ package com.swiggy.usecase;
 
 import java.util.Scanner;
 
-import javax.print.DocFlavor.INPUT_STREAM;
-
 import com.swiggy.model.Card;
 import com.swiggy.model.Deck;
 import com.swiggy.model.Player;
@@ -21,6 +19,7 @@ public class Game {
 	private Player[] totalPlayers;
 	private PlayerService playerService;
 	private DeckService deckService;
+	private boolean applyActionCard;
 	private int penalty;
 	private int turn;
 	private boolean reversePlay;
@@ -172,96 +171,268 @@ public class Game {
 		// In case of currentCard = Jack, Queen
 		
 		if(penalty != 0) {
-			System.out.println("Since current card is Action Card, So you have to draw="+penalty+" from deck of cards");
-
-			while(penalty-- >0) {
-				
-				Card newCard = deckService.getTopCard(deck.getDeckOfCards());
-				playerService.pickCard(currentPlayer, newCard);
-				
-				System.out.println("You have picked card :-"+ newCard);
-				confirmToContinue();
-				
-				// while taking cards from deckOFCards it get's empty, then
-				
-				if(deckService.isEmpty(deck.getDeckOfCards())){
-					printBoundry();
-					System.out.println("Match is Draw, As deckOfCards is finished.......");
-					printBoundry();
-					
-					System.out.println("Want to start new Game? (y/n)");
-					String choice = scanner.next();
-					
-					if(choice.equalsIgnoreCase("y")) {
-						deck = new Deck();
-						startGame();
-						return;
-					}
-					else {
-						System.out.println("Thankyou to play...........");
-						return;
-					}
-				}
-			}
-			
-			/*
-			 * Throwing valid card for next player as he/she can't throw same card/any action cards
-			 * So, Checking it has validCard to play then provide chance, otherwise
-			 * skipped his chance
-			 */
-
-			if(!checkForDifferentValidCard(currentPlayer)){
-				System.out.println("You don't have valid card to play, So your chance is skipped");
-			}
-			else {
-				System.out.println("Choose card to throw on Discard Pile");
-				int selectedCard = scanner.nextInt();
-				
-				while(isAnyActionCard(currentPlayer, selectedCard) || isDifferentSuitCard(currentPlayer, selectedCard)){
-					System.out.println("Choose valid card to throw on Discard Pile,\nCan't be action/different suit card");
-					selectedCard = scanner.nextInt();
-				}
-			}
-			
-			if(reversePlay) {
-				turn--;
-			}
-			else {
-				turn++;
-			}
-			
-			// need to stop, for providing next chance to next player
-			return;
+//			System.out.println("Since current card is Action Card, So you have to draw="+penalty+" from deck of cards");
+//
+//			while(penalty-- >0) {
+//				
+//				Card newCard = deckService.getTopCard(deck.getDeckOfCards());
+//				playerService.pickCard(currentPlayer, newCard);
+//				
+//				System.out.println("You have picked card :-"+ newCard);
+//				confirmToContinue();
+//				
+//				// while taking cards from deckOFCards it get's empty, then
+//				
+//				if(deckService.isEmpty(deck.getDeckOfCards())){
+//					printBoundry();
+//					System.out.println("Match is Draw, As deckOfCards is finished.......");
+//					printBoundry();
+//					
+//					System.out.println("Want to start new Game? (y/n)");
+//					String choice = scanner.next();
+//					
+//					if(choice.equalsIgnoreCase("y")) {
+//						deck = new Deck();
+//						startGame();
+//						return;
+//					}
+//					else {
+//						System.out.println("Thankyou to play...........");
+//						return;
+//					}
+//				}
+//			}
+//			
+//			/*
+//			 * Throwing valid card for next player as he/she can't throw same card/any action cards
+//			 * So, Checking it has validCard to play then provide chance, otherwise
+//			 * skipped his chance
+//			 */
+////
+////			if(!checkForDifferentValidCard(currentPlayer)){
+////				System.out.println("You don't have valid card to play, So your chance is skipped");
+////			}
+////			else {
+////				System.out.println("Choose card to throw on Discard Pile");
+////				int selectedCard = scanner.nextInt();
+////				
+////				while(isAnyActionCard(currentPlayer, selectedCard) || !isDifferentSuitCard(currentPlayer, selectedCard)){
+////					System.out.println("Choose valid card to throw on Discard Pile,\nCan't be action/different suit card");
+////					selectedCard = scanner.nextInt();
+////				}
+////				
+////				// updating current card for next player
+////				
+////				currentCard = playerService.throwCardOnDiscardPile(currentPlayer, selectedCard);
+////				
+////				discardPile[indexOfDiscardPile++] = currentCard;
+////				
+////			}
+//			
+//			if(reversePlay) {
+//				turn--;
+//			}
+//			else {
+//				turn++;
+//			}
+//			
+//			// need to stop, for providing next chance to next player
+//			return;
 		}
 		
 
 		/*
-		 *  if current card is any Action Card () 
+		 *  if current card is any Action Card (Ace, King, Queen, Jack) 
 		 */
 		
+		if(currentCard.isSpecialCard()) {
+		
+			if(currentCard.getFace().equals("  Ace   ")) {
+				
+				// Your turn is get Skipped
+				if(reversePlay) {
+					turn--;
+				}
+				else {
+					turn++;
+				}
+				
+				// for second next player this will be (true)
+				if(applyActionCard) {
+					
+					nextCardIfCurrentCardIsActionCard(currentPlayer);
+					this.applyActionCard = false;
+					
+					// chance of next player
+					return;
+				}
+				
+				this.applyActionCard = true;
+				
+				// Chance of next player
+				return;
+			}
+			else if(currentCard.getFace().equals("  King  ")) {
+				
+				if(applyActionCard) {
+					applyActionCard = false;
+//					selectNextCard(currentPlayer);
+				}
+				
+				// reverse the flow of playerTurns
+				if(reversePlay) {
+					reversePlay = false;
+					turn++;
+				}
+				else {
+					reversePlay = true;
+					turn--;
+				}
+				
+				this.applyActionCard = true;
+				
+				// Chance of next player;
+				return;
+			}
+			else if(currentCard.getFace().equals(" Queen  ")) {
+				
+				// draw 2 cards from deckOfCards (penalty = 2)
+				
+				penaltyGotApplied(currentPlayer);
+			}
+			else if(currentCard.getFace().equals("  Jack  ")) {
+				
+			}
+
+		}
+		
+	}
+	
+	
+	private void penaltyGotApplied(Player currentPlayer) {
+		System.out.println("Since current card is Action Card, So you have to draw="+penalty+" from deck of cards");
+
+		while(penalty-- >0) {
+			
+			Card newCard = deckService.getTopCard(deck.getDeckOfCards());
+			playerService.pickCard(currentPlayer, newCard);
+			
+			System.out.println("You have picked card :-"+ newCard);
+			confirmToContinue();
+			
+			// while taking cards from deckOFCards it get's empty, then
+			
+			if(deckService.isEmpty(deck.getDeckOfCards())){
+				printBoundry();
+				System.out.println("Match is Draw, As deckOfCards is finished.......");
+				printBoundry();
+				
+				System.out.println("Want to start new Game? (y/n)");
+				String choice = scanner.next();
+				
+				if(choice.equalsIgnoreCase("y")) {
+					deck = new Deck();
+					startGame();
+					return;
+				}
+				else {
+					System.out.println("Thankyou to play...........");
+					return;
+				}
+			}
+		}
+		
+		/*
+		 * Throwing valid card for next player as he/she can't throw same card/any action cards
+		 * So, Checking it has validCard to play then provide chance, otherwise
+		 * skipped his chance
+		 */
+		
+		nextCardIfCurrentCardIsActionCard(currentPlayer);
+		
+		if(reversePlay) {
+			turn--;
+		}
+		else {
+			turn++;
+		}
+		
+		// need to stop, for providing next chance to next player
+		return;
+	}
+	
+	
+	/*
+	 * Throwing valid card for next player as he/she can't throw same card/any action cards
+	 * So, Checking it has validCard to play then provide chance, otherwise
+	 * skipped his chance
+	 */
+	
+	private void nextCardIfCurrentCardIsActionCard(Player currentPlayer) {
+
+		if(!checkForDifferentValidCard(currentPlayer)){
+			System.out.println("You don't have valid card to play, So your chance is skipped");
+		}
+		else {
+			System.out.println("Choose card to throw on Discard Pile");
+			int selectedCard = scanner.nextInt();
+			
+			while(isAnyActionCard(currentPlayer, selectedCard) || !isDifferentSuitCard(currentPlayer, selectedCard)){
+				System.out.println("Choose valid card to throw on Discard Pile,\nCan't be action/different suit card");
+				selectedCard = scanner.nextInt();
+			}
+			
+			// updating current card for next player
+			
+			currentCard = playerService.throwCardOnDiscardPile(currentPlayer, selectedCard);
+			
+			discardPile[indexOfDiscardPile++] = currentCard;
+			
+		}
 	}
 	
 	
 	private boolean checkForDifferentValidCard(Player currentPlayer) {
+
+		for(Card card : currentPlayer.getCardsInHand()) {
+			
+			if(card == null) {
+				break;
+			}
+			
+			// it might be action card
+			if(card.getSuit().equals(currentCard.getSuit())) {
+				if(!card.isSpecialCard()) {
+					return true;
+				}
+			}
+		}
 		
 		return false;
 	}
 	
+	
+	// return true if selected card is different suit card
 	
 	private boolean isDifferentSuitCard(Player currentPlayer, int selectedCard) {
 		
-		return false;
+		if(currentPlayer.getCardsInHand()[selectedCard].getSuit().equals(currentCard.getSuit()))
+			return false;
+		
+		return true;
 	}
 	
+	/*
+	 *  return true, if any of the actions cards (Ace, Jack, Queen, King) Or null value
+	 *  return false, if not an action card
+	 */
 	
 	private boolean isAnyActionCard(Player currentPlayer, int selectedCard) {
-		
-		// return true, if any of the actions cards (Ace, Jack, Queen, King)
-		
+
 		if(currentPlayer.getCardsInHand()[selectedCard].isSpecialCard())
 			return true;
-		
-		// return false, if card=null or not an action card
+		else if(currentPlayer.getCardsInHand()[selectedCard] == null)
+			return true;
 		
 		return false;
 	}
