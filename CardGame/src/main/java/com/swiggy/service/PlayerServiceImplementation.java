@@ -88,7 +88,7 @@ public class PlayerServiceImplementation implements PlayerService {
 					result.append("|"+allCards[card].getFace()+"| ");
 				}
 				else {
-					result.append(cardLayout[layout]+" ");
+					result.append(" "+cardLayout[layout]+" ");
 				}
 			}
 			
