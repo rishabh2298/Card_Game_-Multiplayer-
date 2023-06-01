@@ -7,7 +7,7 @@ public interface PlayerService {
 	
 	public abstract void pickCard(Player currentPlayer, Card card);
 	
-	public abstract Card throwCardOnDiscardPil(Player currentPlayer, int indexOfCard);
+	public abstract Card throwCardOnDiscardPile(Player currentPlayer, int indexOfCard);
 	
 	public abstract boolean hasWon(Player currentPlayer); 
 	

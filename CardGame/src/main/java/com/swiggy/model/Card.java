@@ -40,22 +40,24 @@ public class Card {
 	
 	public String toString() {
 		
-		String[] cardLayout = {"===========","|			|","|			|","==========="};
+		String[] cardLayout = {"========== ","| |","| |","========== "};
 		
 		StringBuilder cardBox = new StringBuilder();
 		
 		for(int index=1; index<cardLayout.length; index++) {
 			if(index==1) {
-				cardBox.append("|  "+suit+"  |");
+				cardBox.append("|"+this.suit+"|");
 			}
 			else if(index==2) {
-				cardBox.append("| "+face+" |");
+				cardBox.append("|"+this.face+"|");
 			}
 			else {
 				cardBox.append(cardLayout[index]);
 			}
 			
-			// to make proper box shape
+			/* to make proper box shape
+			 * when print all boxes together
+			 */
 			cardBox.append("\n");
 		}
 		

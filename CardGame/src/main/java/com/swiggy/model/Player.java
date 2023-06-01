@@ -53,6 +53,13 @@ public class Player {
 	public int getIndexOfNextNewCard() {
 		return indexOfNextNewCard;
 	}
+	
+	
+	// to update next index of player card which is null 
+	
+	public void setIndexOfNextNewCard(int indexOfNextNewCard) {
+		this.indexOfNextNewCard = indexOfNextNewCard;
+	}
 
 	
 	public String toString() {
