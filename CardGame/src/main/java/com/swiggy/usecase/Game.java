@@ -161,7 +161,7 @@ public class Game {
 		// to design output much readable
 		printBoundry();
 		
-		System.out.println(currentPlayer.getPlayerName()+" It's you turn, Current Card on Discard Pile is :-\n"+ currentCard);
+		System.out.println(currentPlayer.getPlayerName()+" It's your turn, Current Card on Discard Pile is :-\n"+ currentCard);
 		
 		printBoundry();
 		
@@ -205,7 +205,7 @@ public class Game {
 				
 				if(applyActionCard) {
 					applyActionCard = false;
-					selectAnyNextCard(currentPlayer);
+					nextCardIfCurrentCardIsActionCard(currentPlayer);
 					
 					if(reversePlay) turn--;
 					else turn++;
@@ -284,6 +284,9 @@ public class Game {
 			 */
 			
 			drawACardFromDeck(currentPlayer);
+			
+			// next player chance after drawn a card
+			return;
 		}
 		
 		// until select valid cards from hand
@@ -381,7 +384,7 @@ public class Game {
 	 */
 	
 	private void penaltyGotApplied(Player currentPlayer) {
-		System.out.println("Since current card is Action Card, So you have to draw="+penalty+" from deck of cards");
+		System.out.println("Since current card is Action Card, So you have to draw = "+penalty+" from deck of cards");
 
 		while(penalty-- >0) {
 			
@@ -481,7 +484,7 @@ public class Game {
 	
 	private void drawACardFromDeck(Player currentPlayer) {
 		
-		System.out.println("You don't have valid card to play, So your chance is skipped");
+		System.out.println("You don't have valid card to play,");
 		System.out.println("You have to draw a new card");
 
 		Card newCard = deckService.getTopCard(deck.getDeckOfCards());
