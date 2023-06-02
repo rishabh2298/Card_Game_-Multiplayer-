@@ -17,6 +17,7 @@ public class Game {
 	private Card[] discardPile;
 	private int indexOfDiscardPile;
 	private Player[] totalPlayers;
+//	private static Card[] deck.getDeckOfCards();
 	private PlayerService playerService;
 	private DeckService deckService;
 	private boolean applyActionCard;
@@ -35,18 +36,17 @@ public class Game {
 		
 		this.deckService = new DeckServiceImplementation();
 		
-		// creating Card[] deckOfCards as constructor built
+		// creating Card[] deck.getDeckOfCards() as constructor built
 		deck = new Deck();
 		
-		// shuffle to make card unpredictable
-		deckService.shuffle(deck.getDeckOfCards());
-		
-		// get starting card before first player chance.
-		currentCard = getInitialCard();
+//		deck.getDeckOfCards() = deck.getdeck.getDeckOfCards()();
 		
 		// shuffle before distributing to each player
 		deckService.shuffle(deck.getDeckOfCards());
 		
+		// get starting card before first player chance.
+		currentCard = getInitialCard();
+
 		// maximum possible size of discard pile
 		discardPile = new Card[52];
 		
@@ -54,7 +54,6 @@ public class Game {
 		discardPile[indexOfDiscardPile++] = currentCard;
 		
 		scanner = new Scanner(System.in);
-		
 		
 		// Number Of player want's to play (as Multiplayer game);
 		
@@ -129,19 +128,18 @@ public class Game {
 	
 	private void playGame(Player currentPlayer) {
 		
-		// if deckOfCards are empty then game is draw
+		// if deck.getDeckOfCards() are empty then game is draw
 		
 		if(deckService.isEmpty(deck.getDeckOfCards())){
 			printBoundry();
-			System.out.println("Match is Draw, As deckOfCards is finished.......");
+			System.out.println("Match is Draw, As deck.getDeckOfCards() is finished.......");
 			printBoundry();
 			
 			System.out.println("Want to start new Game? (y/n)");
 			String choice = scanner.next();
 			
 			if(choice.equalsIgnoreCase("y")) {
-				deck = new Deck();
-				startGame();
+				new Game().startGame();
 				return;
 			}
 			else {
@@ -223,7 +221,7 @@ public class Game {
 			}
 			else if(currentCard.getFace().equals(" Queen  ")) {
 				
-				// draw 2 cards from deckOfCards (penalty = 2)
+				// draw 2 cards from deck.getDeckOfCards() (penalty = 2)
 				penalty = 2;
 				
 				/*
@@ -238,7 +236,7 @@ public class Game {
 			}
 			else if(currentCard.getFace().equals("  Jack  ")) {
 				
-				// draw 4 cards from deckOFCards (penalty = 4)
+				// draw 4 cards from deck.getDeckOfCards() (penalty = 4)
 				penalty = 4;
 				
 				penaltyGotApplied(currentPlayer);
@@ -262,6 +260,16 @@ public class Game {
 		System.out.println("Choose card to throw on Discard Pile");
 		int selectedCard = scanner.nextInt();
 		
+		if(!hasCounterCard(currentPlayer)) {
+			
+			/*
+			 *  As not have any valid card to throw on discard Pile, So have to draw new card
+			 *  from deckOfCards
+			 */
+			
+			drawACardFromDeck(currentPlayer);
+		}
+		
 		while(!isValidCard(currentPlayer, selectedCard)){
 			System.out.println("Choose valid card to throw on Discard Pile,\nCan't be null/different suit card");
 			selectedCard = scanner.nextInt();
@@ -274,6 +282,42 @@ public class Game {
 		discardPile[indexOfDiscardPile++] = currentCard;
 	}
 	
+	
+	// To check if currentPlayer has any counter card to play if currentCard is NormalCard
+	
+	private boolean hasCounterCard(Player currentPlayer){
+		
+		// This are numbers of valid cards in hands of currentPlayer
+		// as it is 0-based index
+		
+		int sizeOfCards = currentPlayer.getIndexOfNextNewCard();
+		Card[] cardsInHand = currentPlayer.getCardsInHand();
+		
+		for(int card=0; card<sizeOfCards; card++) {
+			
+			if(cardsInHand[card] != null) {
+				
+				// if same suit then can be any card
+				if(cardsInHand[card].getSuit().equals(currentCard.getSuit())) {
+					return true;
+				}
+				
+				// if different suit then value(rank) of both the cards should be same
+				else if(cardsInHand[card].getFace().equals(currentCard.getFace())) {
+					return true;
+				}
+			}	
+		}
+		
+		return false;
+	}
+	
+	
+	/*
+	 *	If current card is normal card then, Normal card will apply so select card
+	 *	i.e., A player can only play a card if it matches either the suit or the 
+	 *  rank of the top card on the discard pile (currentCard). 
+	 */
 	
 	private boolean isValidCard(Player currentPlayer, int selectedCard) {
 	
@@ -296,6 +340,11 @@ public class Game {
 	}
 	
 	
+	/*
+	 *  If has any action card (Queen, Jack) then this method will be called but allotting
+	 *  appropriate penalty
+	 */
+	
 	private void penaltyGotApplied(Player currentPlayer) {
 		System.out.println("Since current card is Action Card, So you have to draw="+penalty+" from deck of cards");
 
@@ -307,19 +356,18 @@ public class Game {
 			System.out.println("You have picked card :-"+ newCard);
 			confirmToContinue();
 			
-			// while taking cards from deckOFCards it get's empty, then
+			// while taking cards from deck.getDeckOfCards() it get's empty, then
 			
 			if(deckService.isEmpty(deck.getDeckOfCards())){
 				printBoundry();
-				System.out.println("Match is Draw, As deckOfCards is finished.......");
+				System.out.println("Match is Draw, As deck.getDeckOfCards() is finished.......");
 				printBoundry();
 				
 				System.out.println("Want to start new Game? (y/n)");
 				String choice = scanner.next();
 				
 				if(choice.equalsIgnoreCase("y")) {
-					deck = new Deck();
-					startGame();
+					new Game().startGame();
 					return;
 				}
 				else {
@@ -358,35 +406,10 @@ public class Game {
 	private void nextCardIfCurrentCardIsActionCard(Player currentPlayer) {
 
 		if(!checkForDifferentNonActionCard(currentPlayer)){
-			System.out.println("You don't have valid card to play, So your chance is skipped");
-			System.out.println("You have to draw a new card");
-
-			Card newCard = deckService.getTopCard(deck.getDeckOfCards());
-			playerService.pickCard(currentPlayer, newCard);
 			
-			System.out.println("You have picked card :-"+ newCard);
-			confirmToContinue();
+			// This method will make current player to draw a card from deckOfCard
 			
-			// while taking cards from deckOFCards it get's empty, then
-			
-			if(deckService.isEmpty(deck.getDeckOfCards())){
-				printBoundry();
-				System.out.println("Match is Draw, As deckOfCards is finished.......");
-				printBoundry();
-				
-				System.out.println("Want to start new Game? (y/n)");
-				String choice = scanner.next();
-				
-				if(choice.equalsIgnoreCase("y")) {
-					deck = new Deck();
-					startGame();
-					return;
-				}
-				else {
-					System.out.println("Thankyou to play...........");
-					return;
-				}
-			}
+			drawACardFromDeck(currentPlayer);
 		}
 		else {
 			System.out.println("Choose card to throw on Discard Pile");
@@ -406,7 +429,47 @@ public class Game {
 		}
 	}
 	
+	
+	/*
+	 * 	This method will let user to draw a new card from deckOfCards and If deckOfCards
+	 *  get empty then, It will stop the application by asking for next Game.
+	 */
+	
+	private void drawACardFromDeck(Player currentPlayer) {
+		
+		System.out.println("You don't have valid card to play, So your chance is skipped");
+		System.out.println("You have to draw a new card");
+
+		Card newCard = deckService.getTopCard(deck.getDeckOfCards());
+		playerService.pickCard(currentPlayer, newCard);
+		
+		System.out.println("You have picked card :-"+ newCard);
+		confirmToContinue();
+		
+		// while taking cards from deck.getDeckOfCards() it get's empty, then
+		
+		if(deckService.isEmpty(deck.getDeckOfCards())){
+			printBoundry();
+			System.out.println("Match is Draw, As deck.getDeckOfCards() is finished.......");
+			printBoundry();
+			
+			System.out.println("Want to start new Game? (y/n)");
+			String choice = scanner.next();
+			
+			if(choice.equalsIgnoreCase("y")) {
+				new Game().startGame();
+				return;
+			}
+			else {
+				System.out.println("Thankyou to play...........");
+				return;
+			}
+		}
+	}
+	
+	
 	// it will check for availability non-action card of same suit
+	
 	private boolean checkForDifferentNonActionCard(Player currentPlayer) {
 
 		for(Card card : currentPlayer.getCardsInHand()) {

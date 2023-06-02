@@ -35,6 +35,7 @@ public class PlayerServiceImplementation implements PlayerService {
 		
 		if(currentPlayer.getCardsInHand()[indexOfCard + 1] == null) {
 			
+			// reducing 1 card from hand of palyer
 			currentPlayer.getCardsInHand()[indexOfCard] = null;
 			
 			// updating index of next new card (which has to be null) to add new card
@@ -52,7 +53,10 @@ public class PlayerServiceImplementation implements PlayerService {
 			
 			indexOfCard++;
 		}
-
+		
+		// reducing 1 card from hand of palyer
+		currentPlayer.getCardsInHand()[indexOfCard] = null;
+		
 		// updating index of next new card (which has to be null) to add new card
 
 		currentPlayer.setIndexOfNextNewCard(indexOfCard + 1);

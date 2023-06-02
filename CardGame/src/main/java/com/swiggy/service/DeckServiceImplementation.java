@@ -29,11 +29,11 @@ public class DeckServiceImplementation implements DeckService {
 		
 		for(int index=0; index<originalSizeOfDeck; index++) {
 			// taking random card from deckOfCards
-			int randomIndex = (int)Math.floor(originalSizeOfDeck * Math.random());
+			int randomIndex = (int)(Math.floor(originalSizeOfDeck * Math.random()));
 			
 			// swapping currentCard with randomCard
 			Card firstCard = deckOfCards[index];
-			firstCard = deckOfCards[randomIndex];
+			deckOfCards[index] = deckOfCards[randomIndex];
 			deckOfCards[randomIndex] = firstCard;
 		}
 	}
