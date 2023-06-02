@@ -14,6 +14,18 @@ public class Deck {
 		
 		this.deckOfCards = new Card[numberOfCards];
 		
+		/*
+		 *  making spaces in names so that output will be more clearly visible,
+		 *  check README.md file for sample output images, with these spaces in string values
+		 *  This make output more understandable and vision smooth
+		 *  
+		 *  If update any methods in future please take care of these extra-spaces in between
+		 *  of string values (like: "   Ace   ")
+		 *  consider values with these much spaces only
+		 *  
+		 *  Note : Each String values are of (8-characters) throw-out every classes and methods 
+		 */
+		
 		String[] allSuits = {"Diamonds", "  Clubs ", " Hearts "," Spades "};
 		
 		String[] allFaces = {"  Ace   ", "  Two   "," Three  ","  Four  ","  Five  ","  Six   "," Seven  "," Eight  ","  Nine  "

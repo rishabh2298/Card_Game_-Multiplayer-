@@ -21,7 +21,7 @@ public class PlayerServiceImplementationTest {
 	
 	
 	@BeforeEach
-	public void setUp() {
+	public void setUpTest() {
 		
 		deck = new Deck();
 		deckService = new DeckServiceImplementation();
