@@ -90,6 +90,11 @@ public class Game {
 		
 		while(!gameOver(totalPlayers)) {
 			
+			System.out.println();
+			System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooopoooooo");
+			System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooopoooooo");
+			System.out.println();
+			
 			int playerTurn = turn % totalPlayers.length;
 			playGame(totalPlayers[playerTurn]);
 			
@@ -118,6 +123,11 @@ public class Game {
 					turn = totalPlayers.length - 3;
 				}
 			}
+			
+			System.out.println();
+			System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooopoooooo");
+			System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooopoooooo");
+			System.out.println();
 		}
 		
 	}
