@@ -17,7 +17,6 @@ public class Game {
 	private Card[] discardPile;
 	private int indexOfDiscardPile;
 	private Player[] totalPlayers;
-//	private static Card[] deck.getDeckOfCards();
 	private PlayerService playerService;
 	private DeckService deckService;
 	private boolean applyActionCard;
@@ -259,6 +258,13 @@ public class Game {
 
 		System.out.println("Choose card to throw on Discard Pile");
 		int selectedCard = scanner.nextInt();
+		selectedCard--;
+		
+		while(selectedCard < 0 || selectedCard>=currentPlayer.getIndexOfNextNewCard()) {
+			System.out.println("Please Enter valid card Number");
+			selectedCard = scanner.nextInt();
+			selectedCard--;
+		}
 		
 		if(!hasCounterCard(currentPlayer)) {
 			
@@ -270,9 +276,18 @@ public class Game {
 			drawACardFromDeck(currentPlayer);
 		}
 		
+		// until select valid cards from hand
+		
 		while(!isValidCard(currentPlayer, selectedCard)){
-			System.out.println("Choose valid card to throw on Discard Pile,\nCan't be null/different suit card");
+			System.out.println("Choose valid card to throw on Discard Pile,");
 			selectedCard = scanner.nextInt();
+			selectedCard--;
+			
+			while(selectedCard < 0 || selectedCard >= currentPlayer.getIndexOfNextNewCard()) {
+				System.out.println("Please Enter valid card Number");
+				selectedCard = scanner.nextInt();
+				selectedCard--;
+			}
 		}
 		
 		// updating current card for next player
@@ -306,6 +321,11 @@ public class Game {
 				else if(cardsInHand[card].getFace().equals(currentCard.getFace())) {
 					return true;
 				}
+
+				// if current card = normal card, then can use Action cards
+				else if(cardsInHand[card].isSpecialCard()) {
+					return true;
+				}
 			}	
 		}
 		
@@ -334,6 +354,11 @@ public class Game {
 			else if(choosenCard.getFace().equals(currentCard.getFace())) {
 				return true;
 			}
+			
+			// if current card = normal card, then can use Action cards
+			else if(choosenCard.isSpecialCard()) {
+				return true;
+			}
 		}
 		
 		return false;
@@ -353,7 +378,7 @@ public class Game {
 			Card newCard = deckService.getTopCard(deck.getDeckOfCards());
 			playerService.pickCard(currentPlayer, newCard);
 			
-			System.out.println("You have picked card :-"+ newCard);
+			System.out.println("You have picked card :-\n"+ newCard);
 			confirmToContinue();
 			
 			// while taking cards from deck.getDeckOfCards() it get's empty, then
@@ -405,6 +430,7 @@ public class Game {
 	
 	private void nextCardIfCurrentCardIsActionCard(Player currentPlayer) {
 
+		// check for any different non-action card
 		if(!checkForDifferentNonActionCard(currentPlayer)){
 			
 			// This method will make current player to draw a card from deckOfCard
@@ -414,10 +440,18 @@ public class Game {
 		else {
 			System.out.println("Choose card to throw on Discard Pile");
 			int selectedCard = scanner.nextInt();
+			selectedCard--;
 			
-			while(isAnyActionCard(currentPlayer, selectedCard) || !isDifferentSuitCard(currentPlayer, selectedCard)){
+			while(selectedCard < 0 || selectedCard>=currentPlayer.getIndexOfNextNewCard()) {
+				System.out.println("Please Enter valid card Number");
+				selectedCard = scanner.nextInt();
+				selectedCard--;
+			}
+			
+			while(isAnyActionCard(currentPlayer, selectedCard) || isDifferentSuitCard(currentPlayer, selectedCard)){
 				System.out.println("Choose valid card to throw on Discard Pile,\nCan't be action/different suit card");
 				selectedCard = scanner.nextInt();
+				selectedCard--;
 			}
 			
 			// updating current card for next player
@@ -443,7 +477,7 @@ public class Game {
 		Card newCard = deckService.getTopCard(deck.getDeckOfCards());
 		playerService.pickCard(currentPlayer, newCard);
 		
-		System.out.println("You have picked card :-"+ newCard);
+		System.out.println("You have picked card :-\n"+ newCard);
 		confirmToContinue();
 		
 		// while taking cards from deck.getDeckOfCards() it get's empty, then
@@ -469,6 +503,8 @@ public class Game {
 	
 	
 	// it will check for availability non-action card of same suit
+	// 1. action card = no , 
+	// 2. any other number card = yes, or same suit = yes
 	
 	private boolean checkForDifferentNonActionCard(Player currentPlayer) {
 
@@ -478,7 +514,7 @@ public class Game {
 				break;
 			}
 			
-			// it might be action card
+			// it might be action card,
 			if(card.getSuit().equals(currentCard.getSuit())) {
 				if(!card.isSpecialCard()) {
 					return true;

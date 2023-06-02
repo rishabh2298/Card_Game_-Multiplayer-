@@ -11,6 +11,7 @@ public class MultiPlayerCardGame {
 		System.out.println("          WELCOME  TO  CARDS  GAME");
 		System.out.println();
 		System.out.println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+		System.out.println();
 		
 		Game game = new Game();
 		

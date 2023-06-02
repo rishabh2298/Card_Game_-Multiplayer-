@@ -59,7 +59,7 @@ public class PlayerServiceImplementation implements PlayerService {
 		
 		// updating index of next new card (which has to be null) to add new card
 
-		currentPlayer.setIndexOfNextNewCard(indexOfCard + 1);
+		currentPlayer.setIndexOfNextNewCard(indexOfCard);
 		
 		return removedCard;
 	}
