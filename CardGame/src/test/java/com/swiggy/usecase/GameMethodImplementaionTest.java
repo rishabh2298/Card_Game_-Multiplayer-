@@ -111,7 +111,60 @@ public class GameMethodImplementaionTest {
 		else {
 			assertFalse(gameMethod.hasCounterCard(totalPlayers[0], selectedCard));
 		}
+	}
+	
+	
+	/**
+	 * This will check if card is valid or not according if currentCard = normal number card
+	 */
+	@Test
+	public void testIsValidCard() {
 		
+		gameMethod.distributeCardsToPlayer(deck, totalPlayers);
+		
+		Card selectedCard = new Card("Diamonds", " Three  ");
+		
+		// allotting new card to player to check if suit(case-1)/face(case-2) is same then return true;
+		playerService.pickCard(totalPlayers[0], selectedCard);
+		
+		
+		// case-1 : if suit is matching
+		
+		Card currentCard1 = new Card("Diamonds", "  Six   ");
+		
+		// checking if current card and cardsInHand will have same suits
+		Assertions.assertTrue(gameMethod.isValidCard(totalPlayers[0], totalPlayers[0].getIndexOfNextNewCard() - 1, currentCard1));
+		
+		
+		// case-2 : if face is matching
+		
+		Card currentCard2 = new Card("  Clubs " ," Three  ");
+
+		// checking if current card and cardsInHand will have same Faces
+		Assertions.assertTrue(gameMethod.isValidCard(totalPlayers[0], totalPlayers[0].getIndexOfNextNewCard() - 1, currentCard2));
+		
+	}
+	
+	
+	@Test
+	public void testDrawACardFromDeck() {
+		
+		// this will call original method to distribute cards to each player
+		
+		gameMethod.distributeCardsToPlayer(deck, totalPlayers);
+		
+		// this will return valid card from top left after distributing to player
+		Card topCard = deckService.getPeekCard(deck.getDeckOfCards());
+
+		// This will add top card of deck as last valid card in players cardInHand
+		gameMethod.drawACardFromDeck(totalPlayers[0], deck);
+		
+		// this will check top card of deck is same as drawn card from deck by current player
+		Assertions.assertEquals(topCard, totalPlayers[0].getCardsInHand()[totalPlayers[0].getIndexOfNextNewCard() - 1], "Peek card of deck and drawn card by current player is not same, Check method drawCardFromDeck of GameMethodImplementation");
+		
+		/*	IMPORTANT (otherwise test case wont move next to validate other tests)
+		 *  NOTE :- please enter (any char) in console to confirm that you have drawn card from Deck
+		 */
 	}
 	
 }
