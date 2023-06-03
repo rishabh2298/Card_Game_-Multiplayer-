@@ -43,45 +43,7 @@ public class GameMethodImplementaionTest {
 		
 	}
 	
-	
-	@Test
-	public void testDistributeCardsToPlayer() {
-		
-		// this will call original method to distribute cards to each player
-		
-		gameMethod.distributeCardsToPlayer(deck, totalPlayers);
-		
-		for(int player=0; player<totalPlayers.length; player++) {
-			
-			for(int card=0; card<5; card++) {
-				
-				// checking if method worked and player get cards or not
-				
-				Assertions.assertNotNull(totalPlayers[player].getCardsInHand()[card], "currentPlayer is not getting equal cards, Please check distributeCardToPlayer method of GameMethod interface implementation");
-			}
-		}
-	}
-	
-	
-	@Test
-	public void testGameOver() {
-		
-		// As cards are distributed so no player will won initially
-		// so test case must return false (as 0-th index will have cards to play)
-		gameMethod.distributeCardsToPlayer(deck, totalPlayers);
-		
-		// this method will check if any of the palyer has won the game or not
-		gameMethod.gameOver(totalPlayers);
-		
-		for(int player=0; player<totalPlayers.length; player++) {
-			
-			Assertions.assertNotNull(totalPlayers[player].getCardsInHand()[0], "This player must not be winner, So there is some logic error in gameOver method (or) cardInHands implementation of player");
-			Assertions.assertNotNull(totalPlayers[player].getCardsInHand()[1], "This player must not be winner, but there is some logic error in gameOver method (or) cardInHands implementation of player");
-			
-		}
-	}
-	
-	
+
 	@Test
 	public void testHasCounterCard() {
 		
@@ -94,7 +56,7 @@ public class GameMethodImplementaionTest {
 		for(int validCard=0; validCard<totalPlayers[0].getIndexOfNextNewCard(); validCard++) {
 
 			// these will show error-test, because it will not have to be null
-			Assertions.assertNotNull(totalPlayers[0].getCardsInHand()[validCard],"This should be not null, So check distribution card method (or) getIndextOfnextNewCard method");
+			Assertions.assertNotNull(totalPlayers[0].getCardsInHand()[validCard],"This should be not null, So check distribution card method (or) getIndextOfnextNewCard (and) hasCounterCard method of GameMethodImplementation class");
 
 		}
 
@@ -117,6 +79,7 @@ public class GameMethodImplementaionTest {
 	/**
 	 * This will check if card is valid or not according if currentCard = normal number card
 	 */
+	
 	@Test
 	public void testIsValidCard() {
 		
@@ -165,6 +128,75 @@ public class GameMethodImplementaionTest {
 		/*	IMPORTANT (otherwise test case wont move next to validate other tests)
 		 *  NOTE :- please enter (any char) in console to confirm that you have drawn card from Deck
 		 */
+	}
+	
+	
+	@Test
+	public void testDistributeCardsToPlayer() {
+		
+		// this will call original method to distribute cards to each player
+		
+		gameMethod.distributeCardsToPlayer(deck, totalPlayers);
+		
+		for(int player=0; player<totalPlayers.length; player++) {
+			
+			for(int card=0; card<5; card++) {
+				
+				// checking if method worked and player get cards or not
+				
+				Assertions.assertNotNull(totalPlayers[player].getCardsInHand()[card], "currentPlayer is not getting equal cards, Please check distributeCardToPlayer method of GameMethod interface implementation");
+			}
+		}
+	}
+	
+	
+	@Test
+	public void testGameOver() {
+		
+		// As cards are distributed so no player will won initially
+		// so test case must return false (as 0-th index will have cards to play)
+		gameMethod.distributeCardsToPlayer(deck, totalPlayers);
+		
+		// this method will check if any of the palyer has won the game or not
+		gameMethod.gameOver(totalPlayers);
+		
+		for(int player=0; player<totalPlayers.length; player++) {
+			
+			Assertions.assertNotNull(totalPlayers[player].getCardsInHand()[0], "This player must not be winner, So there is some logic error in gameOver method (or) cardInHands implementation of player");
+			Assertions.assertNotNull(totalPlayers[player].getCardsInHand()[1], "This player must not be winner, but there is some logic error in gameOver method (or) cardInHands implementation of player");
+			
+		}
+	}
+	
+	
+	/*
+	 * These will check if current player has any other card then action card
+	 * with same suit if currentCard = Action Card (Ace, Queen, King, Jack)
+	 */
+	
+	@Test
+	public void testCheckForDifferentNonActionCard() {
+		
+		// this will call original method to distribute cards to each player
+		
+		gameMethod.distributeCardsToPlayer(deck, totalPlayers);
+	
+		Card currentCard = new Card("Diamonds"," Queen  ");
+		
+		// allotting normal card with same suit as current card to check output
+		
+		Card selectedCard = new Card("Diamonds","  Four  ");
+		
+		playerService.pickCard(totalPlayers[0], selectedCard);
+	
+		/*
+		 *  checking method of GameMethod Class
+		 *  this will check current player suit matches with any valid card 
+		 *  with same suit but have normal card
+		 */
+		
+		Assertions.assertTrue(gameMethod.checkForDifferentNonActionCard(totalPlayers[0], currentCard), "There is some problem in logic of checkForDifferentNonAcionCard method of GameMethodImplementation class");
+		
 	}
 	
 }
