@@ -1,5 +1,8 @@
 package com.swiggy.usecase;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,6 +63,55 @@ public class GameMethodImplementaionTest {
 	}
 	
 	
+	@Test
+	public void testGameOver() {
+		
+		// As cards are distributed so no player will won initially
+		// so test case must return false (as 0-th index will have cards to play)
+		gameMethod.distributeCardsToPlayer(deck, totalPlayers);
+		
+		// this method will check if any of the palyer has won the game or not
+		gameMethod.gameOver(totalPlayers);
+		
+		for(int player=0; player<totalPlayers.length; player++) {
+			
+			Assertions.assertNotNull(totalPlayers[player].getCardsInHand()[0], "This player must not be winner, So there is some logic error in gameOver method (or) cardInHands implementation of player");
+			Assertions.assertNotNull(totalPlayers[player].getCardsInHand()[1], "This player must not be winner, but there is some logic error in gameOver method (or) cardInHands implementation of player");
+			
+		}
+	}
 	
+	
+	@Test
+	public void testHasCounterCard() {
+		
+		// this will call original method to distribute cards to each player
+		
+		gameMethod.distributeCardsToPlayer(deck, totalPlayers);
+		
+		Card selectedCard = totalPlayers[0].getCardsInHand()[1];
+		
+		for(int validCard=0; validCard<totalPlayers[0].getIndexOfNextNewCard(); validCard++) {
+
+			// these will show error-test, because it will not have to be null
+			Assertions.assertNotNull(totalPlayers[0].getCardsInHand()[validCard],"This should be not null, So check distribution card method (or) getIndextOfnextNewCard method");
+
+		}
+
+		/*
+		 * case-1 : when has any counter card
+		 */
+		if(gameMethod.hasCounterCard(totalPlayers[0], selectedCard)) {
+			assertTrue(gameMethod.hasCounterCard(totalPlayers[0], selectedCard));
+		}
+
+		/*
+		 * case-2 : when not have any counter card
+		 */
+		else {
+			assertFalse(gameMethod.hasCounterCard(totalPlayers[0], selectedCard));
+		}
+		
+	}
 	
 }
