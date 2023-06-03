@@ -56,27 +56,6 @@ public class GameTest {
 	
 	
 	@Test
-	public void testDistributeCardsToPlayer() {
-		
-		// this method is private inside of Game class
-		
-		totalPlayers = new Player[2];
-		
-		totalPlayers[0] = new Player("Tanmay", new Card[52]);
-		totalPlayers[1] = new Player("Harish", new Card[52]);
-		
-		for(int numberOfCard=0; numberOfCard<5; numberOfCard++) {
-			
-			for(int currentPlayer=0; currentPlayer<totalPlayers.length; currentPlayer++) {
-				playerService.pickCard(totalPlayers[currentPlayer], deckService.getTopCard(deck.getDeckOfCards()));
-				
-				Assertions.assertNotNull(totalPlayers[currentPlayer], "currentPlayer is not getting equal cards, Please check PickCard method of PlayerService interface implementation");
-			}
-		}
-	}
-	
-	
-	@Test
 	public void testGameOver() {
 		
 		// this is a private method inside game class

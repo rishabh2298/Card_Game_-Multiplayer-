@@ -1,6 +1,8 @@
 package com.swiggy.usecase;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.swiggy.model.Card;
 import com.swiggy.model.Deck;
@@ -16,6 +18,7 @@ public class GameMethodImplementaionTest {
 	private DeckService deckService;
 	private Player[] totalPlayers;
 	private Deck deck;
+	private GameMethod gameMethod;
 	
 	
 	@BeforeEach
@@ -33,15 +36,30 @@ public class GameMethodImplementaionTest {
 		totalPlayers[0] = new Player("Tanmay", new Card[52]);
 		totalPlayers[1] = new Player("Harish", new Card[52]);
 		
+		this.gameMethod = new GameMethodImplementation();
+		
+	}
+	
+	
+	@Test
+	public void testDistributeCardsToPlayer() {
+		
+		// this will call original method to distribute cards to each player
+		
+		gameMethod.distributeCardsToPlayer(deck, totalPlayers);
+		
 		for(int player=0; player<totalPlayers.length; player++) {
 			
-			// giving 5-cards initially to eachPlayer
-			
 			for(int card=0; card<5; card++) {
-				totalPlayers[player].getCardsInHand()[totalPlayers[player].getIndexOfNextNewCard()] = deckService.getTopCard(deck.getDeckOfCards());
-				totalPlayers[player].setIndexOfNextNewCard(totalPlayers[player].getIndexOfNextNewCard()+1);
+				
+				// checking if method worked and player get cards or not
+				
+				Assertions.assertNotNull(totalPlayers[player].getCardsInHand()[card], "currentPlayer is not getting equal cards, Please check distributeCardToPlayer method of GameMethod interface implementation");
 			}
 		}
 	}
+	
+	
+	
 	
 }
